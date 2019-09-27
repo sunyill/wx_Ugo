@@ -2,11 +2,13 @@
  * @Description: 
  * @Author: your name
  * @Date: 2019-09-27 10:39:02
- * @LastEditTime: 2019-09-27 20:30:49
+ * @LastEditTime: 2019-09-27 21:39:51
  * @LastEditors: Please set LastEditors
  -->
 <template>
-  <div>
+  <div :style="{height:windowHeight, overflow:'hidden'}">
+    <!-- // 搜索部分 -->
+    <SearchInfo @handleSearch="doSearch"/>
     <swiper
       :indicator-dots="true"
       indicator-color="rgba(255, 255, 255, .5)"
@@ -14,8 +16,7 @@
       autoplay
       interval="3000"
       duration="1000"
-      circular
-    >
+      circular>
       <swiper-item>
         <a href="#">
           <img src="../../../static/uploads/banner1.png" />
@@ -129,7 +130,23 @@
   
 
 <script>
-export default {};
+import SearchInfo from "@/components/searchinfo"
+export default {
+  components:{
+    SearchInfo
+  },
+  data(){
+    return {
+      windowHeight:"auto"
+    }
+  },
+  methods:{
+    doSearch(event){
+      console.log(event)
+      this.windowHeight = event.windowHeight
+    }
+  }
+};
 </script>
 
 <style scoped lang="less">
@@ -172,8 +189,9 @@ swiper a {
     background-color: #f4f4f4;
   }
   .items {
-    overflow: hidden;
     padding: 20rpx 16rpx;
+    overflow: hidden;
+    
   }
   a {
     float: left;
@@ -189,6 +207,7 @@ swiper a {
     width: 273rpx;
     height: 188rpx;
   }
+
   a:nth-child(3),
   a:nth-child(4) {
     width: 193rpx;
