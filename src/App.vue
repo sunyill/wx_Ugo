@@ -1,3 +1,10 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-09-27 10:39:02
+ * @LastEditTime: 2019-09-27 18:43:16
+ * @LastEditors: Please set LastEditors
+ -->
 <script>
 export default {
   created () {
@@ -31,20 +38,13 @@ export default {
 </script>
 
 <style>
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-}
-/* this rule will be remove */
-* {
-  transition: width 2s;
-  -moz-transition: width 2s;
-  -webkit-transition: width 2s;
-  -o-transition: width 2s;
-}
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  input {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
 </style>
