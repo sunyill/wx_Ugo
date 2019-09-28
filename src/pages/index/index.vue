@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: your name
  * @Date: 2019-09-27 10:39:02
- * @LastEditTime: 2019-09-28 19:47:29
+ * @LastEditTime: 2019-09-28 20:08:21
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -31,81 +31,21 @@
     </div>
     <!--楼层( 商品列表 )-->
     <div class="product">
-      <div class="floor">
+      <div class="floor" v-for="(floor,index) in productFloor" :key="index">
         <!-- 标题部分 -->
         <div class="title">
-          <img src="/static/uploads/pic_floor01_title.png" />
+          <img :src="floor.floor_title.image_src" />
         </div>
         <!-- 商品类别部分 -->
         <div class="items">
-          <a href>
-            <img src="/static/uploads/pic_floor01_1@2x.png" alt />
+          <a href v-for="(product,key) in floor.product_list" :key="key">
+            <img :src="product.image_src" alt />
           </a>
-          <a href>
-            <img src="/static/uploads/pic_floor01_2@2x.png" alt />
-          </a>
-          <a href>
-            <img src="/static/uploads/pic_floor01_3@2x.png" alt />
-          </a>
-          <a href>
-            <img src="/static/uploads/pic_floor01_4@2x.png" alt />
-          </a>
-          <a href>
-            <img src="/static/uploads/pic_floor01_5@2x.png" alt />
-          </a>
-        </div>
-
-        <!-- 二标题部分 -->
-        <div class="floor">
-          <div class="title">
-            <img src="/static/uploads/pic_floor02_title.png" />
-          </div>
-          <!-- 商品类别部分 -->
-          <div class="items">
-            <a href>
-              <img src="/static/uploads/pic_floor02_1@2x.png" alt />
-            </a>
-            <a href>
-              <img src="/static/uploads/pic_floor02_2@2x.png" alt />
-            </a>
-            <a href>
-              <img src="/static/uploads/pic_floor02_3@2x.png" alt />
-            </a>
-            <a href>
-              <img src="/static/uploads/pic_floor02_4@2x.png" alt />
-            </a>
-            <a href>
-              <img src="/static/uploads/pic_floor02_5@2x.png" alt />
-            </a>
-          </div>
-        </div>
-        <!--三 标题部分 -->
-        <div class="floor">
-          <div class="title">
-            <img src="/static/uploads/pic_floor03_title.png" />
-          </div>
-          <!-- 商品类别部分 -->
-          <div class="items">
-            <a href>
-              <img src="/static/uploads/pic_floor03_1@2x.png" alt />
-            </a>
-            <a href>
-              <img src="/static/uploads/pic_floor03_2@2x.png" alt />
-            </a>
-            <a href>
-              <img src="/static/uploads/pic_floor03_3@2x.png" alt />
-            </a>
-            <a href>
-              <img src="/static/uploads/pic_floor03_4@2x.png" alt />
-            </a>
-            <a href>
-              <img src="/static/uploads/pic_floor03_5@2x.png" alt />
-            </a>
-          </div>
         </div>
       </div>
     </div>
   </div>
+    
 </template>
 
   
@@ -123,7 +63,9 @@ export default {
       // 轮播图数据
       bannerList: [],
       // 首页分类数据
-      navsList:[]
+      navsList:[],
+      // 获取商品楼层
+      productFloor:[]
     };
   },
 
@@ -144,11 +86,18 @@ export default {
         url:'/api/public/v1/home/catitems'
       })
       this.navsList= message
+    },
+    async getProduct(){
+      const {message} = await request({
+        url:'/api/public/v1/home/floordata'
+      })
+      this.productFloor = message
     }
   },
   mounted() {
     this.getBannerList();
     this.getNavList();
+    this.getProduct();
   }
 };
 </script>
