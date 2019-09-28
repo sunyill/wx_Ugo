@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: your name
  * @Date: 2019-09-27 10:39:02
- * @LastEditTime: 2019-09-28 20:43:52
+ * @LastEditTime: 2019-09-28 21:37:10
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -125,7 +125,15 @@ export default {
   onPageScroll(ev){
     // console.log(ev);
     this.scrollTop = ev.scrollTop
+  },
+  onShareAppMessage(){
+    return {
+      title:"小伙伴们,一起玩王者荣耀吧",
+      path: '/pages/index/main',
+        imageUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1569672080944&di=4096b3b19485ca0fa468c9c9fac258ae&imgtype=0&src=http%3A%2F%2Fwww.999zx.cn%2Fadm_file%2Ffck%2Fimages%2F2018%2F4%2FImage%2F20184386447866.jpg'
+    };
   }
+  
 };
 </script>
 
