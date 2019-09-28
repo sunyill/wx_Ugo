@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: your name
  * @Date: 2019-09-27 10:39:02
- * @LastEditTime: 2019-09-28 20:08:21
+ * @LastEditTime: 2019-09-28 20:43:52
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -16,8 +16,9 @@
       autoplay
       interval="3000"
       duration="1000"
-      circular>
-      <swiper-item :key="bannerimg.goods_id" v-for="bannerimg in bannerList" >
+      circular
+    >
+      <swiper-item :key="bannerimg.goods_id" v-for="bannerimg in bannerList">
         <a href="#">
           <img :src="bannerimg.image_src" />
         </a>
@@ -44,15 +45,16 @@
         </div>
       </div>
     </div>
+    <!-- 回到顶部 -->
+    <p class="goTop" @click="goTop" v-show="scrollTop>200">☺</p>
   </div>
-    
 </template>
 
   
 
 <script>
 import SearchInfo from "@/components/searchinfo";
-import request from "@/utils/request"
+import request from "@/utils/request";
 export default {
   components: {
     SearchInfo
@@ -63,9 +65,11 @@ export default {
       // 轮播图数据
       bannerList: [],
       // 首页分类数据
-      navsList:[],
+      navsList: [],
       // 获取商品楼层
-      productFloor:[]
+      productFloor: [],
+      // 滚动的距离
+      scrollTop:0
     };
   },
 
@@ -74,30 +78,53 @@ export default {
       console.log(event);
       this.windowHeight = event.windowHeight;
     },
+    // 回到顶部
+    goTop(){
+      // 根据pageScrollTo 来设置页面滑动距离,当高度为0, 即为到顶部
+      mpvue.pageScrollTo({scrollTop:0})
+    },
     // 获取轮播图info
     async getBannerList() {
-      const {message} =await request({
-        url: '/api/public/v1/home/swiperdata'
-      })
-      this.bannerList = message
-    },
-    async getNavList(){
       const { message } = await request({
-        url:'/api/public/v1/home/catitems'
-      })
-      this.navsList= message
+        url: "/api/public/v1/home/swiperdata"
+      });
+      this.bannerList = message;
     },
-    async getProduct(){
-      const {message} = await request({
-        url:'/api/public/v1/home/floordata'
-      })
-      this.productFloor = message
+    async getNavList() {
+      const { message } = await request({
+        url: "/api/public/v1/home/catitems"
+      });
+      this.navsList = message;
+    },
+    async getProduct() {
+      const { message } = await request({
+        url: "/api/public/v1/home/floordata"
+      });
+      this.productFloor = message;
     }
   },
   mounted() {
     this.getBannerList();
     this.getNavList();
     this.getProduct();
+  },
+  // 页面上拉触底事件的处理函数
+  onReachBottom() {
+    console.log("你在滑动屏幕呢~~");
+  },
+  // 监听用户下拉动作
+  async onPullDownRefresh(ev){
+    await this.getBannerList();
+    await this.getNavList();
+    await this.getProduct();
+
+    // 触发下拉的动画效果
+    mpvue.stopPullDownRefresh();
+  },
+  // 页面滚动触发事件的处理函数
+  onPageScroll(ev){
+    // console.log(ev);
+    this.scrollTop = ev.scrollTop
   }
 };
 </script>
@@ -170,4 +197,14 @@ swiper a {
     margin-top: 10rpx;
   }
 }
+.goTop {
+    position: fixed;
+    right: 40rpx;
+    bottom: 40rpx;
+
+    width: 100rpx;
+    height: 100rpx;
+    background-color: rgba(241, 9, 48, 0.7);
+    border-radius: 50%;
+  }
 </style>
