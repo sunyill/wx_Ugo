@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: your name
  * @Date: 2019-09-27 10:39:02
- * @LastEditTime: 2019-09-27 21:39:51
+ * @LastEditTime: 2019-09-28 19:47:29
  * @LastEditors: Please set LastEditors
  -->
 <template>
   <div :style="{height:windowHeight, overflow:'hidden'}">
     <!-- // 搜索部分 -->
-    <SearchInfo @handleSearch="doSearch"/>
+    <SearchInfo @handleSearch="doSearch" />
     <swiper
       :indicator-dots="true"
       indicator-color="rgba(255, 255, 255, .5)"
@@ -17,35 +17,16 @@
       interval="3000"
       duration="1000"
       circular>
-      <swiper-item>
+      <swiper-item :key="bannerimg.goods_id" v-for="bannerimg in bannerList" >
         <a href="#">
-          <img src="../../../static/uploads/banner1.png" />
-        </a>
-      </swiper-item>
-      <swiper-item>
-        <a href="#">
-          <img src="../../../static/uploads/banner2.png" />
-        </a>
-      </swiper-item>
-      <swiper-item>
-        <a href="#">
-          <img src="../../../static/uploads/banner3.png" />
+          <img :src="bannerimg.image_src" />
         </a>
       </swiper-item>
     </swiper>
     <!-- 主导航 -->
     <div class="navs">
-      <a href>
-        <img src="/static/uploads/icon_index_nav_4@2x.png" alt />
-      </a>
-      <a href>
-        <img src="/static/uploads/icon_index_nav_3@2x.png" alt />
-      </a>
-      <a href>
-        <img src="/static/uploads/icon_index_nav_2@2x.png" alt />
-      </a>
-      <a href>
-        <img src="/static/uploads/icon_index_nav_1@2x.png" alt />
+      <a href v-for="(navs,index) in navsList" :key="index">
+        <img :src="navs.image_src" alt />
       </a>
     </div>
     <!--楼层( 商品列表 )-->
@@ -130,21 +111,44 @@
   
 
 <script>
-import SearchInfo from "@/components/searchinfo"
+import SearchInfo from "@/components/searchinfo";
+import request from "@/utils/request"
 export default {
-  components:{
+  components: {
     SearchInfo
   },
-  data(){
+  data() {
     return {
-      windowHeight:"auto"
+      windowHeight: "auto",
+      // 轮播图数据
+      bannerList: [],
+      // 首页分类数据
+      navsList:[]
+    };
+  },
+
+  methods: {
+    doSearch(event) {
+      console.log(event);
+      this.windowHeight = event.windowHeight;
+    },
+    // 获取轮播图info
+    async getBannerList() {
+      const {message} =await request({
+        url: '/api/public/v1/home/swiperdata'
+      })
+      this.bannerList = message
+    },
+    async getNavList(){
+      const { message } = await request({
+        url:'/api/public/v1/home/catitems'
+      })
+      this.navsList= message
     }
   },
-  methods:{
-    doSearch(event){
-      console.log(event)
-      this.windowHeight = event.windowHeight
-    }
+  mounted() {
+    this.getBannerList();
+    this.getNavList();
   }
 };
 </script>
@@ -170,6 +174,7 @@ swiper a {
   height: 140rpx;
   width: 128rpx;
 }
+
 .floor {
   &:first-child {
     .items {
@@ -191,7 +196,6 @@ swiper a {
   .items {
     padding: 20rpx 16rpx;
     overflow: hidden;
-    
   }
   a {
     float: left;
@@ -202,14 +206,14 @@ swiper a {
     height: 386rpx;
     margin-left: 0;
   }
-  a:nth-child(2),
-  a:nth-child(5) {
+  .items a:nth-child(2),
+  .items a:nth-child(5) {
     width: 273rpx;
     height: 188rpx;
   }
 
-  a:nth-child(3),
-  a:nth-child(4) {
+  .items a:nth-child(3),
+  .items a:nth-child(4) {
     width: 193rpx;
     height: 188rpx;
   }
