@@ -6,7 +6,6 @@
     "pages/center/main"
   ],
   "window": {
-    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#4faf70",
     "navigationBarTitleText": "优购"
   },
