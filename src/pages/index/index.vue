@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: your name
  * @Date: 2019-09-27 10:39:02
- * @LastEditTime: 2019-09-28 21:37:10
+ * @LastEditTime: 2019-09-29 08:09:50
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -26,7 +26,13 @@
     </swiper>
     <!-- 主导航 -->
     <div class="navs">
-      <a href v-for="(navs,index) in navsList" :key="index">
+      <!-- 进行item调整, 使用navigator, 需要制定 open-type -->
+      <a
+        :href="navs.navigator_url || '/pages/list/main?query='+navs.name"
+        :open-type="navs.open_type || 'navigate'"
+        v-for="(navs,index) in navsList"
+        :key="index"
+      >
         <img :src="navs.image_src" alt />
       </a>
     </div>
@@ -39,7 +45,7 @@
         </div>
         <!-- 商品类别部分 -->
         <div class="items">
-          <a href v-for="(product,key) in floor.product_list" :key="key">
+          <a :href="'/pages/list/main?query='+product.name" v-for="(product,key) in floor.product_list" :key="key">
             <img :src="product.image_src" alt />
           </a>
         </div>
@@ -69,7 +75,7 @@ export default {
       // 获取商品楼层
       productFloor: [],
       // 滚动的距离
-      scrollTop:0
+      scrollTop: 0
     };
   },
 
@@ -79,9 +85,9 @@ export default {
       this.windowHeight = event.windowHeight;
     },
     // 回到顶部
-    goTop(){
+    goTop() {
       // 根据pageScrollTo 来设置页面滑动距离,当高度为0, 即为到顶部
-      mpvue.pageScrollTo({scrollTop:0})
+      mpvue.pageScrollTo({ scrollTop: 0 });
     },
     // 获取轮播图info
     async getBannerList() {
@@ -113,7 +119,7 @@ export default {
     console.log("你在滑动屏幕呢~~");
   },
   // 监听用户下拉动作
-  async onPullDownRefresh(ev){
+  async onPullDownRefresh(ev) {
     await this.getBannerList();
     await this.getNavList();
     await this.getProduct();
@@ -122,18 +128,18 @@ export default {
     mpvue.stopPullDownRefresh();
   },
   // 页面滚动触发事件的处理函数
-  onPageScroll(ev){
+  onPageScroll(ev) {
     // console.log(ev);
-    this.scrollTop = ev.scrollTop
+    this.scrollTop = ev.scrollTop;
   },
-  onShareAppMessage(){
+  onShareAppMessage() {
     return {
-      title:"小伙伴们,一起玩王者荣耀吧",
-      path: '/pages/index/main',
-        imageUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1569672080944&di=4096b3b19485ca0fa468c9c9fac258ae&imgtype=0&src=http%3A%2F%2Fwww.999zx.cn%2Fadm_file%2Ffck%2Fimages%2F2018%2F4%2FImage%2F20184386447866.jpg'
+      title: "小伙伴们,一起玩王者荣耀吧",
+      path: "/pages/index/main",
+      imageUrl:
+        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1569672080944&di=4096b3b19485ca0fa468c9c9fac258ae&imgtype=0&src=http%3A%2F%2Fwww.999zx.cn%2Fadm_file%2Ffck%2Fimages%2F2018%2F4%2FImage%2F20184386447866.jpg"
     };
   }
-  
 };
 </script>
 
@@ -206,13 +212,13 @@ swiper a {
   }
 }
 .goTop {
-    position: fixed;
-    right: 40rpx;
-    bottom: 40rpx;
+  position: fixed;
+  right: 40rpx;
+  bottom: 40rpx;
 
-    width: 100rpx;
-    height: 100rpx;
-    background-color: rgba(241, 9, 48, 0.7);
-    border-radius: 50%;
-  }
+  width: 100rpx;
+  height: 100rpx;
+  background-color: rgba(241, 9, 48, 0.7);
+  border-radius: 50%;
+}
 </style>

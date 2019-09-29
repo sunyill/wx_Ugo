@@ -3,7 +3,8 @@
     "pages/index/main",
     "pages/category/main",
     "pages/goods/main",
-    "pages/center/main"
+    "pages/center/main",
+    "pages/list/main"
   ],
   "window": {
     "navigationBarBackgroundColor": "#4faf70",
