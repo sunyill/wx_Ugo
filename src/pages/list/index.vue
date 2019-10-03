@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-28 22:53:31
- * @LastEditTime: 2019-10-03 21:56:11
+ * @LastEditTime: 2019-10-03 23:06:13
  * @LastEditors: Please set LastEditors
  -->
 
@@ -15,7 +15,7 @@
       <span>价格</span>
     </div>
     <!-- 商品列表 -->
-    <scroll-view class="goods" scroll-y>
+    <scroll-view class="goods"  @scrolltolower="getMoreGoods" scroll-y>
       <div class="item" v-for="goods in goodList" :key="goods.goods_id">
         <!-- 商品图片 -->
         <image class="pic" :src="goods.goods_small_logo"></image>
@@ -115,21 +115,44 @@ import request from '../../utils/request'
 export default {
   data(){
     return {
-      goodList:[]
+      goodList:[],
+      page:1,
+      pageSize:5,
+      total:1
     }
   },
   methods:{
-    async getMoreGoods(data){
+    //getMoreGoods 滚动到底部/右边时触发
+    getMoreGoods(){
+      // console.log("scroll-view滑动到底部咯~");
+      this.page +=1;
+      this.getGoodsList(this.query);
+    },
+    
+    async getGoodsList(data){
+      // 如果滑动到了数据的尽头,就不再请求数据了
+      if(this.total==this.goodList.length) return;
+      // 分页参数
+     data.pagenum = this.page;
+     data.pagesize = this.pageSize;
+     
       const {message} = await request({
         url: '/api/public/v1/goods/search',
         data
       })
-      this.goodList = message.goods
-    }
+      // 对数组的拼接操作
+      this.goodList =this.goodList.concat(message.goods); 
+      // 记录数据列表的长度
+      this.total = message.length;
+    },
+    
   },
   onLoad(query){
     this.query = query;  
-    this.getMoreGoods(query)
+    this.getGoodsList(query);
+    },
+  onReachBottom(){
+      console.log("数据滑动到底部咯~");  
     }  
   }
 </script>
